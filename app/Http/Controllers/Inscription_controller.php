@@ -48,19 +48,16 @@ class Inscription_controller extends Controller
             }
             else{
                 
-                //Generation cle
+                /*Generation cle*/
+                //choix de p et q
                 $p = rand(100000,999999);
                 $q = rand(100000,999999);
-                $n = $p * $q;
-                $e = rand(100000,$n);
-                while ($e % $n != 1) {
-                    $e = rand(100000,$n);
-                }
+                $n = $p * $q;      
                 
                 //Determination de e et d
                 $f = ($p - 1) * ($q - 1);
                 $e = rand(100000,$f);
-                while ($e % $n != 1) {
+                while ($e % $f != 1) {
                     $e = rand(100000,$n);
                 }
                 
@@ -76,15 +73,35 @@ class Inscription_controller extends Controller
 
                 //formartion cle publique et privee
                 $cle_publique = $e.$n;
-                $cle_privee = hash('sha256',$d);
+                $cle_privee = $d;
 
-                //Inscription utilisateur
+                /*Inscription utilisateur*/
+                //Utilisateur
                 $user = new \App\Models\User();
                 $user->pseudo = $request->input('Pseudo');
                 $user->password = hash('sha256',$request->input('Password'));
                 $user->email = $request->input('Email');
                 $user->save();
-                $messageIns= 'Inscription réussie ! Vous pouvez maintenant vous connecter.';
+
+                //Compte
+                $account = new \App\Models\compte();
+                $account->user_id = $user->id;
+                $numer=rand(1000000000,9999999999);
+                while(\App\Models\compte::where('numero_compte', $numer)->exists()){
+                    $numer=rand(100000000,9999999999);
+                }
+                $account->numero_compte = $numer;
+                $account->cle_publique = $cle_publique;
+                $account->solde = 1000;
+                $account->save();
+                //cle privee
+                $cle_priv= new \App\Models\cle();
+                $cle_priv->user_id = $user->id;
+                $cle_priv->cle_privee = $cle_privee;
+                $cle_priv->save();
+                
+                
+                $messageIns= 'Inscription réussie ! Vous pouvez maintenant vous connecter.<br>Votre numéro de compte est : '.$account->numero_compte;
                 return redirect('/Connexion')->with('messageIns', $messageIns);
             }
         }
