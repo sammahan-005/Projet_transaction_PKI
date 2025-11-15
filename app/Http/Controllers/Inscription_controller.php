@@ -88,7 +88,7 @@ class Inscription_controller extends Controller
                 $account->user_id = $user->id;
                 $numer=rand(1000000000,9999999999);
                 while(\App\Models\compte::where('numero_compte', $numer)->exists()){
-                    $numer=rand(100000000,9999999999);
+                    $numer=rand(100000000,999999999);
                 }
                 $account->numero_compte = $numer;
                 $account->cle_publique = $cle_publique;
