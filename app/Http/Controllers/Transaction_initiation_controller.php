@@ -17,18 +17,12 @@ class Transaction_initiation_controller extends Controller
         //Calcul du hash 
         //Récupération de la clé privée du destinataire
         $receiverAcc=\App\Models\compte::where('numero_compte',$receive)->first();
-        $cle_receiver=\App\Models\cle::where('user_id',$receiverAcc->id)->first();
-        $d=$cle_receiver->cle_privee;
-        
-        $h=pow($conca,$d);
-         //recupération de la clé publique de l'expéditeur
+
         $senderAcc=\App\Models\compte::where('numero_compte',$send)->first();
-        $public_key_sender=$senderAcc->cle_publique;
-         //séparation e et n
-        $e=substr($public_key_sender,0,13);
-        $n=substr($public_key_sender,13,26);
-         //chiffrement du hash
-        $hash= $h % $n;
+        
+        $hash= hash('sha256', $conca);
+        
+        $hash= hexdec(substr($hash,0,15));//conversion en décimal et prise des 15 premiers caractères
 
         //Signature de la transaction
          
