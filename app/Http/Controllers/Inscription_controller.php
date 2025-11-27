@@ -48,10 +48,46 @@ class Inscription_controller extends Controller
             }
             else{
                 
+                function est_premier(int $n): bool
+{
+    if ($n <= 1) return false;
+    if ($n <= 3) return true;
+    if ($n % 2 == 0 || $n % 3 == 0) return false;
+
+    for ($i = 5; $i * $i <= $n; $i = $i + 6) {
+        if ($n % $i == 0 || $n % ($i + 2) == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+                function generer_nombre_premier_aleatoire(int $min, int $max): int
+                {
+                    $nombre_aleatoire = 0;
+                    $max_tentatives = 1000; // Sécurité pour éviter une boucle infinie dans une mauvaise plage
+                    $tentatives = 0;
+
+                    do {
+                        // 1. Générer un nombre aléatoire (en utilisant la fonction sécurisée random_int)
+                        $nombre_aleatoire = random_int($min, $max);
+                        
+                        // 2. Vérifier si le nombre est premier
+                        if (est_premier($nombre_aleatoire)) {
+                            return $nombre_aleatoire;
+                        }
+
+                        $tentatives++;
+                    } while ($tentatives < $max_tentatives);
+
+                    // Retourner 0 ou lancer une exception si aucun premier n'est trouvé après trop de tentatives
+                    throw new \Exception("Impossible de trouver un nombre premier dans la plage spécifiée.");
+                }
                 /*Generation cle*/
-                //choix de p et q
-                $p = rand(100000,999999);
-                $q = rand(100000,999999);
+                //choix de p et q grace a la fonction generer_nombre_premier_aleatoire
+                $p = generer_nombre_premier_aleatoire(100000,999999);
+                $q = generer_nombre_premier_aleatoire(100000,999999);
+                
                 $n = $p * $q;      
                 
                 //Determination de e et d

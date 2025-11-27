@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 class Transaction_initiation_controller extends Controller
 {
     public function Transaction(Request $request){
+        $request->all();
         $send= $request->input('Sender_Account_Number');
         $receive=$request->input('Receiver_Account_Number');
         
