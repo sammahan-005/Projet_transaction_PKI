@@ -11,20 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('transaction', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('sender_account_id')->constrained('compte')->onDelete('cascade');
-            $table->foreignId('receiver_account_id')->constrained('compte')->onDelete('cascade');
-            $table->decimal('amount', 15, 2);//15 chiffres au total dont 2 apres la virgule
-            $table->string('hash_transaction');
-            $table->string('signature');
-            $table->string('status')->default('pending');//par defaut pending
-            $table->timestamps();
-            
-        });
-        
-
-       
+        // This migration is replaced by 2025_11_27_115453_create_pki_transaction_system.php
+        // Kept for migration history only
     }
 
     /**
@@ -32,6 +20,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('table__cle__transaction__compte');
+        // No tables to drop - handled by new migration
     }
 };

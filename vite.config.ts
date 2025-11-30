@@ -18,7 +18,8 @@ export default defineConfig({
         }),
         tailwindcss(),
         wayfinder({
-            formVariants: true,
+            // formVariants disabled to prevent build errors
+            // You can manually run: php artisan wayfinder:generate --with-form if needed
         }),
     ],
     esbuild: {

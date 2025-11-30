@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // This migration is replaced by new PKI schema
-        // Kept for migration history only
+        Schema::table('private_keys', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
     }
 
     /**
@@ -20,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('private_keys', function (Blueprint $table) {
+            $table->foreignId('user_id')->after('id')->constrained('users')->onDelete('cascade');
+        });
     }
 };

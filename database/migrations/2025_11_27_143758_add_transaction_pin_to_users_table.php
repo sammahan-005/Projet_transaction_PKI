@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // This migration is replaced by new PKI schema
-        // Kept for migration history only
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('transaction_pin', 255)->nullable()->after('password');
+        });
     }
 
     /**
@@ -20,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('transaction_pin');
+        });
     }
 };
